@@ -1,2 +1,4 @@
 cmakebuild/
 .vscode
+waffle/bin
+._.DS_Store
