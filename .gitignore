@@ -2,3 +2,6 @@ cmakebuild/
 .vscode
 waffle/bin
 ._.DS_Store
+.cache/clangd/
+build/
+output_data/
