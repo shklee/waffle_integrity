@@ -79,4 +79,5 @@ target_link_libraries(proxy_benchmark
         ${BENCHMARK_INCLUDE_LIBRARIES}
         ${SERVICE_INCLUDE_LIBRARIES}
         ${CLIENT_INCLUDE_LIBRARIES}
-        Threads::Threads)
+        Threads::Threads
+        /usr/local/lib/libsecp256k1.a)
