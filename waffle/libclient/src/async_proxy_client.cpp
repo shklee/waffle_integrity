@@ -1,4 +1,8 @@
 #include "async_proxy_client.h"
+#include "secp256k1.h"
+#include "secp256k1_multiset.h"
+#include "util.h"
+#include <cstdint>
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -26,6 +30,9 @@ void async_proxy_client::init(const std::string &host_name, int port) {
 
     reader_ = command_response_reader(protocol_);
     response_thread_ = new std::thread(&async_proxy_client::read_responses, this);
+
+    hash_ctx = secp256k1_context_create(SECP256K1_CONTEXT_SIGN |
+                                        SECP256K1_CONTEXT_VERIFY);
 }
 
 int64_t async_proxy_client::get_client_id() {
@@ -71,6 +78,21 @@ std::vector<std::string> async_proxy_client::get_batch(const std::vector<std::st
     // while (requests_->size() > 63){
     //     sleep(1);
     // }
+
+    for (int k = 0; k < keys.size(); ++k) {
+        secp256k1_multiset x;
+        secp256k1_multiset_init(hash_ctx, &x);
+
+        for (int i = 0; i < 100; ++i) {
+            unsigned char data[1000];
+            for(int m = 0; m < 1000/4; m++) ((uint32_t*) data)[m] = rand_uint32(0, UINT32_MAX);
+            secp256k1_multiset_add(hash_ctx, &x, data, sizeof(data));
+        }
+        // convert to hash
+        unsigned char hash_buffer[32];
+        secp256k1_multiset_finalize(hash_ctx, hash_buffer, &x);
+    }
+
     std::vector<std::string> fake_vec;
     return fake_vec;
 }

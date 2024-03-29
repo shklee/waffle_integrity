@@ -55,10 +55,11 @@
         }
 
         for (auto it = key_vectors.begin(); it != key_vectors.end(); it++) {
-             // std::cout << "Entering redis.cpp line " << __LINE__ << std::endl;
-            auto future = clients[it->first]->mget(it->second);
-            futures.push(std::move(future));
-
+            for (int i = 0; i < 100; ++i) {
+                // std::cout << "Entering redis.cpp line " << __LINE__ << std::endl;
+                auto future = clients[it->first]->mget(it->second);
+                futures.push(std::move(future));
+            }
         }
         // Issue requests to each storage server
         for (auto it = key_vectors.begin(); it != key_vectors.end(); it++)
