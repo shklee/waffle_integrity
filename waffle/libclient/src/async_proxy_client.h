@@ -16,6 +16,7 @@
 #include "waffle_thrift_response.h"
 #include "queue.h"
 #include "command_response_reader.h"
+#include "secp256k1.h"
 
 #define GET 0
 #define PUT 1
@@ -66,6 +67,9 @@ private:
     std::shared_ptr<apache::thrift::transport::TTransport> transport_{};
     /* Protocol */
     std::shared_ptr<apache::thrift::protocol::TProtocol> protocol_{};
+
+    /* Hashing Primitive */
+    secp256k1_context *hash_ctx;
 };
 
 
