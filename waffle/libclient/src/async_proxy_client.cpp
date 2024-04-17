@@ -83,6 +83,10 @@ std::vector<std::string> async_proxy_client::get_batch(const std::vector<std::st
         secp256k1_multiset x;
         secp256k1_multiset_init(hash_ctx, &x);
 
+        // Mock what both the worker proxy & data storage server would have to 
+        // do here -------------------------------------------------------------
+        
+        // calculating the hash is the dominant term here, so we only mock this
         for (int i = 0; i < 100; ++i) {
             unsigned char data[1000];
             for(int m = 0; m < 1000/4; m++) ((uint32_t*) data)[m] = rand_uint32(0, UINT32_MAX);
@@ -91,6 +95,7 @@ std::vector<std::string> async_proxy_client::get_batch(const std::vector<std::st
         // convert to hash
         unsigned char hash_buffer[32];
         secp256k1_multiset_finalize(hash_ctx, hash_buffer, &x);
+        // ---------------------------------------------------------------------
     }
 
     std::vector<std::string> fake_vec;
